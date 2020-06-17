@@ -33,29 +33,29 @@ def antcc (command) {
     }
 }
 
-def restartVMs(propfile) {
-    def props = readProperties file: propfile
-    def vms = props['vm.names']?.split(',')
-    def vmserver = props['vm.server']
-    def vmwait = props['vm.wait']?.toInteger()
+// def restartVMs(propfile) {
+//    def props = readProperties file: propfile
+//    def vms = props['vm.names']?.split(',')
+//    def vmserver = props['vm.server']
+//    def vmwait = props['vm.wait']?.toInteger()
 
-    if (!vmserver) {
-        error message: "Required vm.server, vm.names properties are not set in ${params.CC_ENV} env.properties file"
-    }
+//    if (!vmserver) {
+//       error message: "Required vm.server, vm.names properties are not set in ${params.CC_ENV} env.properties file"
+//   }
 
-    def builders = [:]
-    for (x in vms) {
-        def vm = x
-        builders[vm] = {
-            node('master') {
-                vSphere buildStep: [$class: 'PowerOff', evenIfSuspended: false, shutdownGracefully: false, vm: vm], serverName: vmserver
-                vSphere buildStep: [$class: 'PowerOn', timeoutInSeconds: 180, vm: vm], serverName: vmserver
-                sleep vmwait
-            }
-        }                        
-    }
-    parallel builders // run in parallel
-}
+//   def builders = [:]
+//   for (x in vms) {
+//       def vm = x
+//       builders[vm] = {
+//           node('master') {
+//               vSphere buildStep: [$class: 'PowerOff', evenIfSuspended: false, shutdownGracefully: false, vm: vm], serverName: vmserver
+//               vSphere buildStep: [$class: 'PowerOn', timeoutInSeconds: 180, vm: vm], serverName: vmserver
+//               sleep vmwait
+//            }
+//        }                        
+//    }
+//    parallel builders // run in parallel
+// }
 
 def test(propfile) {
     def props = readProperties file: propfile
